@@ -1,0 +1,190 @@
+services:
+    redis-1:
+        image: ${IMAGE}
+        container_name: redis-cluster-master-1.dtx
+        hostname: redis-cluster-master-1.dtx
+        privileged: true
+        command: >
+           sh -c "echo never > /sys/kernel/mm/transparent_hugepage/enabled &&
+                  echo never > /sys/kernel/mm/transparent_hugepage/defrag &&
+                  redis-server /etc/redis/redis.conf"
+        volumes:
+            - ./redis/node-1/data:/data
+            - ./redis/node-1/conf/redis.conf:/etc/redis/redis.conf
+            - ./sysctl.conf:/etc/sysctl.conf
+        ports:
+            - 6371:6379
+            - 16371:16379
+        ulimits: 
+            memlock:
+                soft: -1
+                hard: -1
+        extra_hosts:
+            - "redis-cluster-master-1.dtx:${IP_ADDR_1}"
+            - "redis-cluster-master-2.dtx:${IP_ADDR_2}"
+            - "redis-cluster-master-3.dtx:${IP_ADDR_3}"
+            - "redis-cluster-slave-slave-4.dtx:${IP_ADDR_4}"
+            - "redis-cluster-slave-slave-5.dtx:${IP_ADDR_5}"
+            - "redis-cluster-slave-slave-6.dtx:${IP_ADDR_6}"
+        networks:
+            redis_network:
+                ipv4_address: ${IP_ADDR_1}
+
+    redis-2:
+        image: ${IMAGE}
+        container_name: redis-cluster-master-2.dtx
+        hostname: redis-cluster-master-2.dtk
+        privileged: true
+        command: >
+           sh -c "echo never > /sys/kernel/mm/transparent_hugepage/enabled &&
+                  echo never > /sys/kernel/mm/transparent_hugepage/defrag &&
+                  redis-server /etc/redis/redis.conf"
+        volumes:
+            - ./redis/node-2/data:/data
+            - ./redis/node-2/conf/redis.conf:/etc/redis/redis.conf
+            - ./sysctl.conf:/etc/sysctl.conf
+        ports:
+            - "6372:6379"
+            - 16372:16379
+        ulimits: 
+            memlock:
+                soft: -1
+                hard: -1
+        extra_hosts:
+            - "redis-cluster-master-1.dtx:${IP_ADDR_1}"
+            - "redis-cluster-master-2.dtx:${IP_ADDR_2}"
+            - "redis-cluster-master-3.dtx:${IP_ADDR_3}"
+            - "redis-cluster-slave-slave-4.dtx:${IP_ADDR_4}"
+            - "redis-cluster-slave-slave-5.dtx:${IP_ADDR_5}"
+            - "redis-cluster-slave-slave-6.dtx:${IP_ADDR_6}"
+        networks:
+            redis_network:
+                ipv4_address: ${IP_ADDR_2}
+    redis-3:
+        image: ${IMAGE}
+        container_name: redis-cluster-master-3.dtx
+        hostname: redis-cluster-master-3.dtx
+        privileged: true
+        command: >
+           sh -c "echo never > /sys/kernel/mm/transparent_hugepage/enabled &&
+                  echo never > /sys/kernel/mm/transparent_hugepage/defrag &&
+                  redis-server /etc/redis/redis.conf"
+        volumes:
+            - ./redis/node-3/data:/data
+            - ./redis/node-3/conf/redis.conf:/etc/redis/redis.conf
+            - ./sysctl.conf:/etc/sysctl.conf
+        ports:
+            - "6373:6379"
+            - 16373:16379
+        ulimits: 
+            memlock:
+                soft: -1
+                hard: -1
+        extra_hosts:
+            - "redis-cluster-master-1.dtx:${IP_ADDR_1}"
+            - "redis-cluster-master-2.dtx:${IP_ADDR_2}"
+            - "redis-cluster-master-3.dtx:${IP_ADDR_3}"
+            - "redis-cluster-slave-slave-4.dtx:${IP_ADDR_4}"
+            - "redis-cluster-slave-slave-5.dtx:${IP_ADDR_5}"
+            - "redis-cluster-slave-slave-6.dtx:${IP_ADDR_6}"
+        networks:
+            redis_network:
+                ipv4_address: ${IP_ADDR_3}
+    redis-4:
+        image: ${IMAGE}
+        container_name: redis-cluster-slave-4.dtx
+        hostname: redis-cluster-slave-4.dtk
+        privileged: true
+        command: >
+           sh -c "echo never > /sys/kernel/mm/transparent_hugepage/enabled &&
+                  echo never > /sys/kernel/mm/transparent_hugepage/defrag &&
+                  redis-server /etc/redis/redis.conf"
+        volumes:
+            - ./redis/node-4/data:/data
+            - ./redis/node-4/conf/redis.conf:/etc/redis/redis.conf
+            - ./sysctl.conf:/etc/sysctl.conf
+        ports:
+            - "6374:6379"
+            - 16374:16379
+        ulimits: 
+            memlock:
+                soft: -1
+                hard: -1
+        extra_hosts:
+            - "redis-cluster-master-1.dtx:${IP_ADDR_1}"
+            - "redis-cluster-master-2.dtx:${IP_ADDR_2}"
+            - "redis-cluster-master-3.dtx:${IP_ADDR_3}"
+            - "redis-cluster-slave-slave-4.dtx:${IP_ADDR_4}"
+            - "redis-cluster-slave-slave-5.dtx:${IP_ADDR_5}"
+            - "redis-cluster-slave-slave-6.dtx:${IP_ADDR_6}"
+        networks:
+            redis_network:
+                ipv4_address: ${IP_ADDR_4}
+    redis-5:
+        image: ${IMAGE}
+        container_name: redis-cluster-slave-5.dtx
+        hostname: redis-cluster-slave-5.dtk
+        privileged: true
+        command: >
+           sh -c "echo never > /sys/kernel/mm/transparent_hugepage/enabled &&
+                  echo never > /sys/kernel/mm/transparent_hugepage/defrag &&
+                  redis-server /etc/redis/redis.conf"
+        volumes:
+            - ./redis/node-5/data:/data
+            - ./redis/node-5/conf/redis.conf:/etc/redis/redis.conf
+            - ./sysctl.conf:/etc/sysctl.conf
+        ports:
+            - "6375:6379"
+            - 16375:16379
+        ulimits: 
+            memlock:
+                soft: -1
+                hard: -1
+        extra_hosts:
+            - "redis-cluster-master-1.dtx:${IP_ADDR_1}"
+            - "redis-cluster-master-2.dtx:${IP_ADDR_2}"
+            - "redis-cluster-master-3.dtx:${IP_ADDR_3}"
+            - "redis-cluster-slave-slave-4.dtx:${IP_ADDR_4}"
+            - "redis-cluster-slave-slave-5.dtx:${IP_ADDR_5}"
+            - "redis-cluster-slave-slave-6.dtx:${IP_ADDR_6}"
+        networks:
+            redis_network:
+                ipv4_address: ${IP_ADDR_5}
+    redis-6:
+        image: ${IMAGE}
+        container_name: redis-cluster-slave-6.dtx
+        hostname: redis-cluster-slave-6.dtk
+        privileged: true
+        command: >
+           sh -c "echo never > /sys/kernel/mm/transparent_hugepage/enabled &&
+                  echo never > /sys/kernel/mm/transparent_hugepage/defrag &&
+                  redis-server /etc/redis/redis.conf"
+        volumes:
+            - ./redis/node-6/data:/data
+            - ./redis/node-6/conf/redis.conf:/etc/redis/redis.conf
+            - ./sysctl.conf:/etc/sysctl.conf
+        ports:
+            - "6376:6379"
+            - "16376:16379"
+        ulimits: 
+            memlock:
+                soft: -1
+                hard: -1
+        extra_hosts:
+            - "redis-cluster-master-1.dtx:${IP_ADDR_1}"
+            - "redis-cluster-master-2.dtx:${IP_ADDR_2}"
+            - "redis-cluster-master-3.dtx:${IP_ADDR_3}"
+            - "redis-cluster-slave-slave-4.dtx:${IP_ADDR_4}"
+            - "redis-cluster-slave-slave-5.dtx:${IP_ADDR_5}"
+            - "redis-cluster-slave-slave-6.dtx:${IP_ADDR_6}"
+        networks:
+            redis_network:
+                ipv4_address: ${IP_ADDR_6}
+networks:
+    redis_network:
+        name: redis-cluster
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 10.3.6.0/26
+                  gateway: 10.3.6.1

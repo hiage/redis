@@ -1,0 +1,30 @@
+services:
+    redis:
+        image: ${IMAGE}
+        container_name: redis-standalone
+        hostname: redis-standalone
+        privileged: true
+        command: >
+           sh -c "echo never > /sys/kernel/mm/transparent_hugepage/enabled &&
+                  echo never > /sys/kernel/mm/transparent_hugepage/defrag &&
+                  redis-server /etc/redis/redis.conf"
+        volumes:
+            - ./redis-data:/data
+            - ./redis.conf:/etc/redis/redis.conf
+            - ./sysctl.conf:/etc/sysctl.conf
+        ports:
+            - 6379:6379
+        ulimits: 
+            memlock:
+                soft: -1
+                hard: -1
+        networks:
+            - redis_network
+networks:
+    redis_network:
+        name: redis-standalone
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 10.3.7.0/26
+                  gateway: 10.3.7.1
